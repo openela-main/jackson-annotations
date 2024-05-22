@@ -1,45 +1,40 @@
 Name:          jackson-annotations
-Version:       2.10.0
+Version:       2.14.2
 Release:       1%{?dist}
 Summary:       Core annotations for Jackson data processor 
-License:       ASL 2.0
-URL:           https://github.com/FasterXML/jackson-annotations
+License:       Apache-2.0
 
-# The upstream release of jackson-annotations @ 2.10.0 was botched a couple
-# of times; this suffix is necessary to pull the latest, correct, non-SNAPSHOT
-# 2.10.0 release.
-#
-# See: https://github.com/FasterXML/jackson-annotations/releases
-%global relsuffix -try-3
-Source0:       %{url}/archive/%{name}-%{version}%{relsuffix}.tar.gz
+URL:           https://github.com/FasterXML/jackson-annotations
+Source0:       %{url}/archive/%{name}-%{version}.tar.gz
 
 BuildRequires:  maven-local
-BuildRequires:  mvn(com.fasterxml.jackson:jackson-parent:pom:)
+BuildRequires:  mvn(com.fasterxml.jackson:jackson-parent:pom:) >= 2.14
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 
 BuildArch:      noarch
+%if 0%{?fedora}
+ExclusiveArch:  %{java_arches} noarch
+%endif
 
 %description
 Core annotations used for value types,
 used by Jackson data-binding package.
 
-%package javadoc
-Summary: Javadoc for %{name}
-
-%description javadoc
-This package contains API documentation for %{name}.
-
 %prep
-%setup -q -n %{name}-%{name}-%{version}%{relsuffix}
+%setup -q -n %{name}-%{name}-%{version}
+
 %pom_remove_plugin "org.moditect:moditect-maven-plugin"
+%pom_remove_plugin "org.sonatype.plugins:nexus-staging-maven-plugin"
+%pom_remove_plugin "de.jjohannes:gradle-module-metadata-maven-plugin"
+%pom_remove_plugin "org.codehaus.mojo:build-helper-maven-plugin"
 
 sed -i 's/\r//' LICENSE
 
 %mvn_file : %{name}
 
 %build
-%mvn_build
+%mvn_build -f -j
 
 %install
 %mvn_install
@@ -48,10 +43,10 @@ sed -i 's/\r//' LICENSE
 %doc README.md release-notes/*
 %license LICENSE
 
-%files javadoc -f .mfiles-javadoc
-%license LICENSE
-
 %changelog
+* Tue Oct 24 2023 Red Hat PKI Team <rhcs-maint@redhat.com> - 2.14.2-1
+- Rebase to upstream version 2.14.2
+
 * Tue Nov 12 2019 Red Hat PKI Team <rhcs-maint@redhat.com> - 2.10.0-1
 - Update to latest upstream release
 
