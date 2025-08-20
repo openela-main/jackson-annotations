@@ -1,5 +1,5 @@
 Name:          jackson-annotations
-Version:       2.14.2
+Version:       2.19.1
 Release:       1%{?dist}
 Summary:       Core annotations for Jackson data processor 
 License:       Apache-2.0
@@ -9,7 +9,6 @@ Source0:       %{url}/archive/%{name}-%{version}.tar.gz
 
 BuildRequires:  maven-local
 BuildRequires:  mvn(com.fasterxml.jackson:jackson-parent:pom:) >= 2.14
-BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 
 BuildArch:      noarch
@@ -25,9 +24,13 @@ used by Jackson data-binding package.
 %setup -q -n %{name}-%{name}-%{version}
 
 %pom_remove_plugin "org.moditect:moditect-maven-plugin"
-%pom_remove_plugin "org.sonatype.plugins:nexus-staging-maven-plugin"
-%pom_remove_plugin "de.jjohannes:gradle-module-metadata-maven-plugin"
-%pom_remove_plugin "org.codehaus.mojo:build-helper-maven-plugin"
+%pom_remove_plugin "org.sonatype.central:central-publishing-maven-plugin"
+%pom_remove_plugin "org.gradlex:gradle-module-metadata-maven-plugin"
+%pom_remove_plugin "org.codehaus.mojo:build-helper-maven-plugin"	
+%pom_xpath_set "//pom:javac.src.version" "1.8"
+%pom_xpath_set "//pom:javac.target.version" "1.8"
+%pom_xpath_set "//pom:maven.compiler.source" "1.8"
+%pom_xpath_set "//pom:maven.compiler.target" "1.8"
 
 sed -i 's/\r//' LICENSE
 
@@ -44,7 +47,11 @@ sed -i 's/\r//' LICENSE
 %license LICENSE
 
 %changelog
-* Tue Oct 24 2023 Red Hat PKI Team <rhcs-maint@redhat.com> - 2.14.2-1
+* Thu Jul 31 2025 Red Hat PKI Team <rhcs-maint@redhat.com> - 2.19.1-1
+- Rebase to upstream version 2.19.1
+- Resolves: RHEL-103106
+
+* Wed Nov 22 2023 Red Hat PKI Team <rhcs-maint@redhat.com> - 2.14.2-1
 - Rebase to upstream version 2.14.2
 
 * Tue Nov 12 2019 Red Hat PKI Team <rhcs-maint@redhat.com> - 2.10.0-1
