@@ -1,5 +1,5 @@
 Name:          jackson-annotations
-Version:       2.19.1
+Version:       2.21
 Release:       1%{?dist}
 Summary:       Core annotations for Jackson data processor 
 License:       Apache-2.0
@@ -8,7 +8,7 @@ URL:           https://github.com/FasterXML/jackson-annotations
 Source0:       %{url}/archive/%{name}-%{version}.tar.gz
 
 BuildRequires:  maven-local
-BuildRequires:  mvn(com.fasterxml.jackson:jackson-parent:pom:) >= 2.14
+BuildRequires:  mvn(com.fasterxml.jackson:jackson-parent:pom:) >= 2.21
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 
 BuildArch:      noarch
@@ -27,10 +27,7 @@ used by Jackson data-binding package.
 %pom_remove_plugin "org.sonatype.central:central-publishing-maven-plugin"
 %pom_remove_plugin "org.gradlex:gradle-module-metadata-maven-plugin"
 %pom_remove_plugin "org.codehaus.mojo:build-helper-maven-plugin"	
-%pom_xpath_set "//pom:javac.src.version" "1.8"
-%pom_xpath_set "//pom:javac.target.version" "1.8"
-%pom_xpath_set "//pom:maven.compiler.source" "1.8"
-%pom_xpath_set "//pom:maven.compiler.target" "1.8"
+%pom_remove_plugin "org.cyclonedx:cyclonedx-maven-plugin"
 
 sed -i 's/\r//' LICENSE
 
@@ -47,6 +44,10 @@ sed -i 's/\r//' LICENSE
 %license LICENSE
 
 %changelog
+* Wed Jul 08 2026 Red Hat PKI Team <rhcs-maint@redhat.com> - 2.21-1
+- Rebase to version 2.21
+- Resolves: RHEL-188291
+
 * Thu Jul 31 2025 Red Hat PKI Team <rhcs-maint@redhat.com> - 2.19.1-1
 - Rebase to upstream version 2.19.1
 - Resolves: RHEL-103106
